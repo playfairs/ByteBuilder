@@ -92,4 +92,4 @@ Contributions are welcome! Please feel free to submit a Pull Request.
 
 ## Support
 
-For issues or feature requests, please open an issue on the GitHub repository.# ByteBuilder
+For issues or feature requests, please open an issue on the GitHub repository.
