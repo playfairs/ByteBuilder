@@ -101,7 +101,6 @@ int main() {
     std::cout << "Enter the folder path where the file should be saved (e.g., /path/to/folder): ";
     std::getline(std::cin, folderPath);
     
-    // Remove trailing slash if present
     if (!folderPath.empty() && (folderPath.back() == '/' || folderPath.back() == '\\')) {
         folderPath.pop_back();
     }
