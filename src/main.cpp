@@ -93,12 +93,13 @@ void printProgress(double percentage, const std::string& sizeInfo) {
     std::cout.flush();
 }
 
-std::string customDataInput
-bool useCustomData = false;
 int main() {
     std::string filename;
     std::string folderPath;
     std::string sizeInput;
+    
+    std::string customDataInput
+    bool useCustomData = false;
 
     std::cout << "Enter the folder path where the file should be saved (e.g., /path/to/folder): ";
     std::getline(std::cin, folderPath);
@@ -117,7 +118,7 @@ int main() {
     std::cout << "Would you like to use custom data instead of the default string? (y/n): ";
     std::string choice;
     std::getline(std::cin, choice);
-    if (!choice.empty() && (choice[0] == 'y' | | choice[0] == 'Y')) {
+    if (!choice.empty() && (choice[0] == 'y' || choice[0] == 'Y')) {
         useCustomData = true;
     }
 
@@ -136,7 +137,7 @@ int main() {
         std::cout << "Enter the custom data to repeat in the file: \n> ";
         std::getline(std::cin, customDataInput);
         if (customDataInput.empty()) {
-            std:cerr << "Custom data cannot be empty. Exiting. \n";
+            std::cerr << "Custom data cannot be empty. Exiting. \n";
             return 1;
         }
         customDataInput += '\n'; // Adds newline at end
