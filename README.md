@@ -43,6 +43,8 @@ A simple C++ tool for generating files of any size with custom content. Perfect 
    - Enter the folder path where the file should be saved
    - Enter the desired filename
    - Enter the target size (e.g., 1GB, 500MB, 1.5TB)
+   - Enter your own string input. (the data that will be used to make the file.)
+   Note: if you don't want to put your own string input, it will switch to the default sample content.
 
 ### Command Line Arguments (Advanced)
 
