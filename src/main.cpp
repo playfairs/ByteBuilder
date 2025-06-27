@@ -98,7 +98,7 @@ int main() {
     std::string folderPath;
     std::string sizeInput;
     
-    std::string customDataInput
+    std::string customDataInput;
     bool useCustomData = false;
 
     std::cout << "Enter the folder path where the file should be saved (e.g., /path/to/folder): ";
