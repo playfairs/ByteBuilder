@@ -93,6 +93,8 @@ void printProgress(double percentage, const std::string& sizeInfo) {
     std::cout.flush();
 }
 
+std::string customDataInput
+bool useCustomData = false;
 int main() {
     std::string filename;
     std::string folderPath;
@@ -112,6 +114,12 @@ int main() {
 
     std::cout << "Enter the size (e.g., 1GB, 500MB, 1.5TB): ";
     std::getline(std::cin, sizeInput);
+    std::cout << "Would you like to use custom data instead of the default string? (y/n): ";
+    std::string choice;
+    std::getline(std::cin, choice);
+    if (!choice.empty() && (choice[0] == 'y' | | choice[0] == 'Y')) {
+        useCustomData = true;
+    }
 
     uint64_t targetSize;
     try {
@@ -124,8 +132,18 @@ int main() {
         return 1;
     }
 
-    std::string data = "This is a sample text line that will be repeated to fill the file. ";
-    data += "The quick brown fox jumps over the lazy dog. 1234567890!@#$%^&*()_+\n";
+    if (useCustomData) {
+        std::cout << "Enter the custom data to repeat in the file: \n> ";
+        std::getline(std::cin, customDataInput);
+        if (customDataInput.empty()) {
+            std:cerr << "Custom data cannot be empty. Exiting. \n";
+            return 1;
+        }
+        customDataInput += '\n'; // Adds newline at end
+    }
+
+    std::string data = useCustomData ? customDataInput
+        : "This is a sample text line that will be repeated to fill the file. The quick brown fox jumps over the lazy dog. 123456789!@#$%^&*()_+\n"
 
     while (data.size() < BUFFER_SIZE) {
         data += data;
