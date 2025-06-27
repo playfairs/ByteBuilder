@@ -144,7 +144,7 @@ int main() {
     }
 
     std::string data = useCustomData ? customDataInput
-        : "This is a sample text line that will be repeated to fill the file. The quick brown fox jumps over the lazy dog. 123456789!@#$%^&*()_+\n"
+        : "This is a sample text line that will be repeated to fill the file. The quick brown fox jumps over the lazy dog. 123456789!@#$%^&*()_+\n";
 
     while (data.size() < BUFFER_SIZE) {
         data += data;
