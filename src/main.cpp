@@ -75,6 +75,15 @@ std::string formatSize(uint64_t bytes) {
         unit++;
     }
 
+    uint64_t getFreeSpace(const std::string& path) {
+    try {
+        std::filesystem::path fsPath = path;
+        return std::filesystem::space(fsPath).available;
+    } catch (...) {
+        return 0;
+    }
+}
+
     std::ostringstream oss;
     oss << std::fixed << std::setprecision(2) << size << " " << units[unit];
     return oss.str();
@@ -128,6 +137,18 @@ int main() {
         if (targetSize == 0) {
             throw std::invalid_argument("Size must be greater than 0");
         }
+        
+        uint64_t freeSpace = getFreeSpace(folderPath);
+        std::cout << "Estimated file size: " << formatSize(targetSize) << std::endl;
+        std::cout << "Free disk space in target folder: " << formatSize(freeSpace) << std::endl;
+
+        if (targetSize > freeSpace) {
+            std::cerr << "Error: Not enough free space to create file.\n";
+            std::cerr << "Required: " << formatSize(targetSize) << ", Available: " << formatSize(freeSpace) << "\n";
+            std::cerr <> "Aborting.\n"
+            return 1;
+        }
+    
     } catch (const std::exception& e) {
         std::cerr << "Error: " << e.what() << std::endl;
         return 1;
