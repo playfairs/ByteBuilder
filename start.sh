@@ -13,10 +13,10 @@ c++ -std=c++17 -O3 -o build/file_generator src/main.cpp
 
 if [ $? -eq 0 ]; then
     echo -e "${GREEN}Compilation successful! Running the program...${NC}\n"
-    
+
     ./build/file_generator
-    
-    read -p "\nClean up build files? (y/n): " -n 1 -r
+
+    read -p "Clean up build files? (y/n): " -n 1 -r
     echo
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         rm -rf build
