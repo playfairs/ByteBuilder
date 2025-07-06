@@ -161,7 +161,7 @@ int main() {
             std::cerr << "Custom data cannot be empty. Exiting. \n";
             return 1;
         }
-        customDataInput += '\n'; // Adds newline at end
+        customDataInput += '\n';
     }
 
     std::string data = useCustomData ? customDataInput
@@ -171,6 +171,9 @@ int main() {
         data += data;
     }
     data = data.substr(0, BUFFER_SIZE);
+
+    size_t linesPerBuffer = std::count(data.begin(), data.end(), '\n');
+    uint64_t totalLines = 0;
 
     std::cout << "Creating file: " << fullPath << " with size " << formatSize(targetSize) << std::endl;
     std::cout << "This may take a while..." << std::endl;
@@ -203,6 +206,12 @@ int main() {
                 throw std::runtime_error("Error writing to file");
             }
 
+            if (toWrite == data.size()) {
+                totalLines += linesPerBuffer;
+            } else {
+                totalLines += std::count(data.begin(), data.begin() + toWrite, '\n');
+            }
+
             bytesWritten += toWrite;
             chunksWritten++;
 
@@ -220,6 +229,7 @@ int main() {
 
         std::cout << "\nFile created successfully at: " << fullPath << std::endl;
         std::cout << "Total size: " << formatSize(bytesWritten) << std::endl;
+        std::cout << "Total lines: " << totalLines << std::endl;
         std::cout << "Time taken: " << (duration / 60) << " minutes and " << (duration % 60) << " seconds" << std::endl;
 
     } catch (const std::exception& e) {
