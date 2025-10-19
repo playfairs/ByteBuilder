@@ -155,22 +155,27 @@ int main() {
     }
 
     if (useCustomData) {
-        std::cout << "Enter the custom data to repeat in the file: \n> ";
+        std::cout << "Enter the custom data to repeat in the file (leave blank for null bytes): \n> ";
         std::getline(std::cin, customDataInput);
+
         if (customDataInput.empty()) {
-            std::cerr << "Custom data cannot be empty. Exiting. \n";
-            return 1;
+            std::cout << "No input detected. The file will be filled with null bytes.\n";
+        } else {
+            customDataInput += '\n';
         }
-        customDataInput += '\n';
     }
 
-    std::string data = useCustomData ? customDataInput
-        : "This is a sample text line that will be repeated to fill the file. The quick brown fox jumps over the lazy dog. 123456789!@#$%^&*()_+\n";
+    std::string data;
 
-    while (data.size() < BUFFER_SIZE) {
-        data += data;
+    if (useCustomData && customDataInput.empty()) {
+        data = std::string(BUFFER_SIZE, '\0');
+    } else if (useCustomData) {
+        data = customDataInput;
+        while (data.size() < BUFFER_SIZE) data += data;
+        data = data.substr(0, BUFFER_SIZE);
+    } else {
+        data = std::string(BUFFER_SIZE, '\0'); // This should in theory be null bytes
     }
-    data = data.substr(0, BUFFER_SIZE);
 
     size_t linesPerBuffer = std::count(data.begin(), data.end(), '\n');
     uint64_t totalLines = 0;
