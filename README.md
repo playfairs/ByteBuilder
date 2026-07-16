@@ -1,6 +1,6 @@
-# ByteBuilder v2
+# ByteBuilder v2.0.0
 
-ByteBuilder v2 is a ~~modern~~, production-quality C++20 command-line utility for creating, verifying, and inspecting large files. It is designed for benchmarking, storage testing, and generating deterministic or sparse test data.
+A simple C++ tool for generating files of any size with custom content. Perfect for testing storage, benchmarking, or creating dummy data.
 
 ## Features
 
