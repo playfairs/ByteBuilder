@@ -1,97 +1,110 @@
-# ByteBuilder v1.0.0
+# ByteBuilder v2
 
-A simple C++ tool for generating files of any size with custom content. Perfect for testing storage, benchmarking, or creating dummy data.
+ByteBuilder v2 is a ~~modern~~, production-quality C++20 command-line utility for creating, verifying, and inspecting large files. It is designed for benchmarking, storage testing, and generating deterministic or sparse test data.
 
 ## Features
 
-- Generate files from 1 byte to multiple yottabytes (theoretical limit, not sure how you could even have that much storage but whatever.)
-- Supports various units: B, KB/KiB, MB/MiB, GB/GiB, TB/TiB, PB/PiB, EB/EiB, ZB/ZiB, YB/YiB (I get petabytes MAYBE, but if you have storage beyond that, what the fuck could you possibly need that for??)
-- Choose exact folder location for file generation
-- Progress bar with real-time statistics
-- Cross-platform compatibility (Linux/macOS/Windows with WSL)
-- Optimized for performance with large file operations
+- Create files with sizes expressed in human-readable units such as B, KiB, MiB, GiB, and TiB
+- Optionally create sparse files for efficient large file generation
+- Verify files against an expected size and pattern
 
-## Prerequisites
+## Requirements
 
-- C++17 compatible compiler (g++, clang++, or MSVC)
-- CMake (optional, for alternative build method)
-- Linux/macOS (or Windows with WSL)
+- Nix for the provided flake-based development shell
+   If nix isn't available to your disposal:
+      - A C++20-compatible compiler such as Clang, GCC, or MSVC
+      - Meson and Ninja
 
-## Installation
+## Build
 
-1. Clone this repository:
-   ```bash
-   git clone https://github.com/playfairs/ByteBuilder.git
-   cd bytebuilder
-   ```
+From the repository root:
 
-2. Make the start script executable:
-   ```bash
-   chmod +x start.sh
-   ```
+```bash
+meson setup builddir
+meson compile -C builddir
+```
+
+## Install
+
+Install the binary to your configured prefix:
+
+```bash
+meson install -C builddir
+```
+
+For a userlocal installation that is available on your PATH:
+
+```bash
+meson setup builddir --prefix="$HOME/.local"
+meson compile -C builddir
+meson install -C builddir
+export PATH="$HOME/.local/bin:$PATH"
+```
 
 ## Usage
 
-### Basic Usage
-
-1. Run the start script:
-   ```bash
-   ./start.sh
-   ```
-
-2. Follow the interactive prompts:
-   - Enter the folder path where the file should be saved
-   - Enter the desired filename
-   - Enter the target size (e.g., 1GB, 500MB, 1.5TB)
-   - Enter your own string input. (the data that will be used to make the file.)
-   Note: if you don't want to put your own string input, it will switch to the default sample content.
-
-### Command Line Arguments (Advanced)
-
-For non-interactive use, you can compile and run directly:
+### Create a file
 
 ```bash
-g++ -std=c++17 -O3 -o ByteBuilder src/main.cpp
-./ByteBuilder
+./builddir/bytebuilder create --output /tmp/example.bin --size 1MiB --pattern zero
+
+# or
+
+bytebuilder create --output /tmp/example.bin --size 1MiB --pattern zero
 ```
 
-## Examples
+### Create a sparse file
 
-- Create a 1GB file:
-  ```
-  Size: 1GB
-  ```
+```bash
+./builddir/bytebuilder create --output /tmp/example.bin --size 1GiB --pattern zero --sparse
 
-- Create a 2.5TB file:
-  ```
-  Size: 2.5TB
-  ```
+# or
 
-- Create a 500MB file using binary prefix:
-  ```
-  Size: 500MiB
-  ```
+bytebuilder create --output /tmp/example.bin --size 1GiB --pattern zero --sparse
+```
 
-## How It Works
+### Verify a file
 
-1. The program allocates a 1MB buffer with sample content
-2. It writes this buffer repeatedly to the target file
-3. Progress is tracked and displayed in real-time
-4. The file is precisely sized to the requested dimensions
-5. All operations include error checking and validation
+```bash
+./builddir/bytebuilder verify --output /tmp/example.bin --size 1MiB --pattern zero
 
-## Performance
+# or
 
-- Uses buffered I/O for efficient writing
-- Minimal memory footprint (1MB buffer)
-- Progress updates every 100MB to reduce overhead
-- Optimized for large file operations
+bytebuilder verify --output /tmp/example.bin --size 1MiB --pattern zero
+```
 
+### Show help
 
-## Contributing
+```bash
+./builddir/bytebuilder --help
+./builddir/bytebuilder create --help
+./builddir/bytebuilder verify --help
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+# or
 
-## Support
+bytebuilder --help
+bytebuilder create --help
+bytebuilder verify --help
+```
 
-For issues or feature requests, please open an issue on the GitHub repository.
+## Supported options
+
+- `--output <path>`: destination or source file path
+- `--size <size>`: file size such as `1MiB`, `512K`, or `2G`
+- `--pattern <name>`: `zero`, `incrementing`, or `random`
+- `--seed <value>`: seed for random/incrementing generation
+- `--sparse`: create a sparse file when possible
+- `--no-progress`: disable progress output
+- `--verify`: verify immediately after creating the file
+
+## Development shell with Nix
+
+If you prefer a reproducible dev environment:
+
+```bash
+nix develop
+```
+
+## License
+
+This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
